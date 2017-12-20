@@ -17,28 +17,26 @@ def columnsettings(a):
 
     num = re.compile(r"^-{0,1}\d+(.\d+(\\pm\d+(.\d+){0,1}(e\(-{0,1}\d+\)){0,1}){0,1}){0,1}$")
     v = re.compile(r"[-+]")
-    k = re.compile(r".")
-    nv = re.compile(r"(?=^-{0,1})\d+")
-    nn = re.compile(r"(?=^-{0,1}\d+.)\d+")
-    u = re.compile(r"(?=^-{0,1}\d+(.\d+){0,1}\\pm)\d+(.\d+){0,1}")
-    e = re.compile(r"(?=^-{0,1}\d+(.\d+(\\pm\d+(.\d+){0,1}){0,1}){0,1}e)\d+")
-#    e = re.compile(r"(?=^-{0,1}\d+(.\d+(\\pm\d+(.\d+){0,1}e\()-{0,1}\d+")
+#   k = re.compile(r".")
+    nv = re.compile(r"[-+]{0,1}\d+")
+    nn = re.compile(r"(?=^[+-]{0,1}\d+.)\d+")
+    u = re.compile(r"(?=^[+-]{0,1}\d+(.\d+){0,1}\\pm)\d+(.\d+){0,1}")
+    e = re.compile(r"(?=^[+-]{0,1}\d+(.\d+(\\pm\d+(.\d+){0,1}){0,1}){0,1}e)[+-]{0,1}\d+")
+#   e = re.compile(r"(?=^-{0,1}\d+(.\d+(\\pm\d+(.\d+){0,1}e\()-{0,1}\d+")
 
     for i in a:
         if not num.match(str(i)):
             return "c"
-        c = nv.match(str(i))
-        lengthnv = len(a.group()) if a else 0
-        a = nn.match(str(i))
-        lengthnn = len(a.group()) if a else 0
-        b = u.match(str(i))
-        lengthu = len(b.group()) if b else 0
-        a = e.match(str(i))
-        lengthe = len(a.group()) if a else 0
-        if(c):
-            if(v.match(b.group())): vz = "+"
-        if(b):
-            if(k.match(b.group())): lengthu -= 1
+        x = nv.match(str(i))
+        lengthnv = len(x.group()) if x else 0
+        y = nn.match(str(i))
+        lengthnn = len(y.group()) if y else 0
+        y = u.match(str(i))
+        lengthu = len(y.group()) if y else 0
+        y = e.match(str(i))
+        lengthe = len(y.group()) if y else 0
+        if(x):
+            if(v.match(x.group())): vz = "+"
         if(lengthnv > lnv): lnv = lengthnv
         if(lengthnn > lnn): lnn = lengthnn
         if(lengthu > lu): lu = lengthu
@@ -50,16 +48,16 @@ caption = file.readline()
 kopfzeile = file.readline()
 file.close()
 
-out = open("build" + str(sys.argv[1])[7:-3] + "tex", "w")
+out = open("build/" + str(sys.argv[1])[8:-4] + ".tex", "w")
 out.write("\\begin{table}\n")
-out.write("\\label{tab:" + str(sys.argv[1])[7:-3] + "}\n")
-out.write("\t\\centering\n")
 out.write("\t\\caption{")
 if((caption[0] == "#") & (caption[1] == "#")):
     out.write(caption[2:])
 else:
     kopfzeile = caption
 out.write(".}\n")
+out.write("\t\\label{tab:" + str(sys.argv[1])[7:-4] + "}\n")
+out.write("\t\\centering\n")
 out.write("\t\\begin{tabular}{")
 for i in data:
     out.write(columnsettings(i) + " ")
@@ -67,14 +65,14 @@ out.write("}\n")
 out.write("\t\t\\toprule\n")
 if(kopfzeile[0] == "#"):
     kopfzeile = [x.strip() for x in kopfzeile[1:].split(',')]
-    out.write("\t")
+    out.write("\t\t")
 #   for i in range(len(kopfzeile) -1):
     for i in range(min(len(kopfzeile), int(data.size/data[0].size))):
         out.write("\t{$" + str(kopfzeile[i]) + "$} & ")
     out.write("\t{$" + str(kopfzeile[-1]) + "$} \\\\\n")
 else:
-    for i in ragne(int(data.size/data[0].size)-1):
-        out.write("\t{$$} &")
+    for i in range(int(data.size/data[0].size)-1):
+        out.write("\t\t{$$} &")
     out.write("\t{$$} \\\\\n")
 
 out.write("\t\t\\midrule\n")
