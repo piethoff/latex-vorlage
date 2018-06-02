@@ -1,3 +1,14 @@
+"""
+Usage:
+Expected .txt file format:
+##[caption]
+#[colum1]\t[colum2]…
+[[data]]
+
+Expected location:
+content/[label]tab.txt
+
+"""
 import numpy as np
 import re
 import sys
