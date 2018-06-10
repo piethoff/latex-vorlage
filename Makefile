@@ -11,13 +11,13 @@ endif
 all: build/main.pdf
 
 SRC = $(wildcard content/*tab.txt)
-TAB = $(patsubst content/%tab.txt, build/%tab.tex, $(SRC))
+TAB = $(patsubst content/%tab.txt, build/%.tex, $(SRC))
 
 # hier Python-Skripte:
 build/plot.pdf: plot.py matplotlibrc | build
 	TEXINPUTS="$(call translate,$(pwd):)" python plot.py
 
-build/%tab.tex: content/%tab.txt
+build/%.tex: content/%tab.txt
 	TEXINPUTS="$(call translate,$(pwd):)" python tab.py $<
 
 # hier weitere Abhängigkeiten für build/main.pdf deklarieren:

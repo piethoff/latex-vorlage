@@ -1,16 +1,16 @@
-import matplotlib.pyplot as plt
 import matplotlib as mpl
-import numpy as np
-from mathe import matheplot as mp
 
 mpl.use('pgf')
 mpl.rcParams.update({
     'pgf.preamble': r'\usepackage{siunitx}',
 })
 
-x = np.linspace(0, 10, 20)
-y = x ** np.sin(x)
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.optimize import curve_fit
+from uncertainties import unumpy as unp
+from uncertainties import ufloat
 
-mp(x,y, dpi=300, factor=160)
-
-plt.savefig("1.pdf", transparent=True)
+#params, covar = curve_fit(f1, l, unp.nominal_values(n**2), absolute_sigma=True, sigma = unp.std_devs(n**2), p0=(1.728, 13420))
+#uparams = unp.uarray(params, np.sqrt(np.diag(covar)))
+#print(uparams)

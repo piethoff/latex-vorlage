@@ -38,7 +38,7 @@ caption = file.readline()
 kopfzeile = file.readline()
 file.close()
 
-out = open("build/" + str(sys.argv[1])[8:-4] + ".tex", "w")
+out = open("build/" + str(sys.argv[1])[8:-7] + ".tex", "w")
 out.write("\\begin{table}\n")
 out.write("\t\\caption{")
 if (caption[0] == "#") and (caption[1] == "#"):
@@ -61,7 +61,7 @@ out.write("\t\t\\toprule\n")
 if(kopfzeile[0] == "#"):
     kopfzeile = [x.strip() for x in kopfzeile[1:].split("\t")]
 #   for i in range(len(kopfzeile) -1):
-    for i in range(min(len(kopfzeile), int(data.size/data[0].size))):
+    for i in range(min(len(kopfzeile), int(data.size/data[0].size)) - 1):
         out.write("\t\t{" + str(kopfzeile[i]) + "} & \n")
     out.write("\t\t{" + str(kopfzeile[-1]) + "} \\\\\n")
 else:
