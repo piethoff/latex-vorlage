@@ -39,7 +39,7 @@ kopfzeile = file.readline()
 file.close()
 
 out = open("build/" + str(sys.argv[1])[8:-7] + ".tex", "w")
-out.write("\\begin{table}\n")
+out.write("\\begin{table}[H]\n")
 out.write("\t\\caption{")
 if (caption[0] == "#") and (caption[1] == "#"):
 	out.write(caption[2:-1])
@@ -80,3 +80,4 @@ for j in range(data[0].size):
 out.write("\t\t\\bottomrule\n")
 out.write("\t\\end{tabular}\n")
 out.write("\\end{table}\n")
+out.write("\\noindent\n")
