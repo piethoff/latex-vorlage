@@ -13,25 +13,44 @@ import numpy as np
 import re
 import sys
 
-data = np.genfromtxt(str(sys.argv[1]), unpack=True)
+data = np.genfromtxt(str(sys.argv[1]), unpack=True, dtype="str", autostrip=True)
 
 def columnsettings(a):
-
 	vz = ""
-	lenvk = 0
+	lenvk = 1
 	lennk = 0
+	lenexp = 0
 	lenunc = 0
 
 	for i in a:
-		if i < 0:
+		if re.search("-", i):
 			vz = "-"
-		if len(str(int(i))) > lenvk:
-			lenvk = len(str(int(i)))
-		if len(str(i).split(".")[1]) > lennk:
-			lennk = len(str(i).split(".")[1])
-
-	return "S[table-format=" + vz + str(lenvk) + "." + str(lennk) + "]"
-
+		x = re.search("\d+(?=\.)", i)
+		if x:
+			if len(x.group()) > lenvk:
+				lenvk = len(x.group())
+		else:
+			x = re.search("\d+", i)
+			if x:
+				if len(x.group()) > lenvk:
+					lenvk = len(x.group())
+		x = re.search("(?<=\.)\d+", i)
+		if x:
+			if len(x.group()) > lennk:
+				lennk = len(x.group())
+		x = re.search("(?<=e)\d+", i)
+		if x:
+			if len(x.group()) > lenexp:
+				lenexp = len(X.group())
+		x = re.search(r"(?<=[\\pm, ±])\d+", i)
+		if x:
+			if len(x.group)+1 > lenunc:
+				lenunc = len(x.group)+1
+			
+	if lenunc == 0:
+		return "S[table-format=" + vz + str(lenvk) + "." + str(lennk) + "e" + str(lenexp) + "]"
+	else:
+		return "S[table-format=" + vz + str(lenvk) + "." + str(lennk) + "e" + str(lenexp) + str(lenunc) +"]"
 
 file = open(str(sys.argv[1]), "r")
 caption = file.readline()
@@ -56,6 +75,10 @@ else:
 	for i in range(int(data.size/data[0].size)):
 		out.write(columnsettings(data[i]) + " ")
 
+#
+#~~~ strings manuell auf gleiche Länge bringen -> 0…0 ergänzen, evtl .0…0
+#
+
 out.write("}\n")
 out.write("\t\t\\toprule\n")
 if(kopfzeile[0] == "#"):
@@ -74,8 +97,8 @@ out.write("\t\t\\midrule\n")
 for j in range(data[0].size):
     out.write("\t\t")
     for i in range(int(round(data.size/data[0].size)) -1):
-        out.write(str(data[i][j]) + "\t& ")
-    out.write(str(data[-1][j]) + "\t\\\\\n")
+        out.write(data[i][j] + "\t& ")
+    out.write(data[-1][j] + "\t\\\\\n")
 
 out.write("\t\t\\bottomrule\n")
 out.write("\t\\end{tabular}\n")
