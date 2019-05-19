@@ -12,16 +12,18 @@ all: build/main.pdf
 
 SRC = $(wildcard content/*tab.txt)
 TAB = $(patsubst content/%tab.txt, build/%.tex, $(SRC))
+PY = $(wildcard *t.py)
+PLOT = $(patsubst %t.py, build/%t.pdf, $(PY))
 
-# hier Python-Skripte:
-build/plot.pdf: plot.py matplotlibrc | build
-	TEXINPUTS="$(call translate,$(pwd):)" python plot.py
+# hier Python-Skripte (alle skripte müssen mit t.py enden):
+build/%t.pdf: %t.py matplotlibrc | build
+	TEXINPUTS="$(call translate,$(pwd):)" python &<
 
 build/%.tex: content/%tab.txt tab.py
 	TEXINPUTS="$(call translate,$(pwd):)" python tab.py $<
 
 # hier weitere Abhängigkeiten für build/main.pdf deklarieren:
-build/main.pdf: build/plot.pdf $(TAB)
+build/main.pdf: $(PLOT) $(TAB)
 
 build/main.pdf: FORCE | build
 	  TEXINPUTS="$(call translate,build:)" \
