@@ -2,7 +2,8 @@ import matplotlib as mpl
 
 mpl.use('pgf')
 mpl.rcParams.update({
-    'pgf.preamble': r'\usepackage{siunitx}',
+	"pgf.texsystem": "lualatex",
+	"pgf.preamble": r"\usepackage{siunitx}",
 })
 
 import matplotlib.pyplot as plt
