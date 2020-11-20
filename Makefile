@@ -17,7 +17,7 @@ PLOT = $(patsubst %t.py, build/%t.pdf, $(PY))
 
 # hier Python-Skripte (alle skripte müssen mit t.py enden):
 build/%t.pdf: %t.py matplotlibrc | build
-	TEXINPUTS="$(call translate,$(pwd):)" python &<
+	TEXINPUTS="$(call translate,$(pwd):)" python $<
 
 build/%.tex: content/%tab.txt tab.py
 	TEXINPUTS="$(call translate,$(pwd):)" python tab.py $<

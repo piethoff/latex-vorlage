@@ -15,3 +15,5 @@ from uncertainties import ufloat
 #params, covar = curve_fit(f1, l, unp.nominal_values(n**2), absolute_sigma=True, sigma = unp.std_devs(n**2), p0=(1.728, 13420))
 #uparams = unp.uarray(params, np.sqrt(np.diag(covar)))
 #print(uparams)
+
+plt.sacefig("build/plot.pdf")
