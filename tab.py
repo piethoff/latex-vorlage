@@ -44,8 +44,8 @@ def columnsettings(a):
 				lenexp = len(X.group())
 		x = re.search(r"(?<=[\\pm, ±])\d+", i)
 		if x:
-			if len(x.group)+1 > lenunc:
-				lenunc = len(x.group)+1
+			if len(x.group())+1 > lenunc:
+				lenunc = len(x.group())+1
 			
 	if lenunc == 0:
 		return "S[table-format=" + vz + str(lenvk) + "." + str(lennk) + "e" + str(lenexp) + "]"
