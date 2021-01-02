@@ -16,4 +16,4 @@ from uncertainties import ufloat
 #uparams = unp.uarray(params, np.sqrt(np.diag(covar)))
 #print(uparams)
 
-plt.sacefig("build/plot.pdf")
+plt.savefig("build/plot.pdf")
